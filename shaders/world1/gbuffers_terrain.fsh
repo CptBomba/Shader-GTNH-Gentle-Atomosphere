@@ -1,0 +1,6 @@
+#version 120
+// Generated entry point; shared implementation is in /program.
+#define GENTLE_NON_EARTH
+#define GENTLE_LIT
+#define GENTLE_TERRAIN
+#include "/program/geometry.fsh"
