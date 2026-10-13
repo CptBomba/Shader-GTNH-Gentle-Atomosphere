@@ -36,6 +36,10 @@ Materiais (`block.properties`, IDs de material, não do registro):
 | 10002 | grama, mudas, flores, flores do Botania | vento com a base presa |
 | 10003 | trigo, cenoura, batata | vento com a base presa |
 | 10004 | água parada e corrente | superfície de água |
+| 10005 | vitória-régia | balanço e flutuação na água |
+
+O ID 10002 também cobre arbusto seco e as flores/folhagens do Biomes O' Plenty
+(`flowers`, `flowers2`, `foliage`) quando `MOD_FLOWERS=1`.
 
 ## Sol e sombras (`lib/lighting.glsl`)
 
@@ -51,12 +55,34 @@ Materiais (`block.properties`, IDs de material, não do registro):
   ligeiramente quente, enfraquecendo com a chuva. Luz de tochas forte e
   superfícies fullbright são protegidas.
 
+## Luz artificial (`lib/blocklight.glsl`)
+
+- Tudo parte da textura de lightmap do próprio jogo, então brilho, gama,
+  visão noturna e relâmpagos continuam iguais ao vanilla.
+- `gentleHeldLight`: o nível de luz do item na mão (`heldBlockLightValue`,
+  `heldBlockLightValue2`) menos a distância em blocos vira um nível de luz
+  virtual; vale o maior entre ele e o nível real. Sem oclusão.
+- `gentleBlockLight`: compara a luminância só-bloco e só-céu do lightmap. Onde
+  a luz artificial domina, aplica um tom âmbar (mais claro perto da chama) e
+  um reforço de até 28% no nível 14. O nível 15 (lava, overlays fullbright,
+  a própria fonte) é preservado. A tremulação (±3,5% no máximo) usa fase
+  espacial de comprimento longo para não criar ondas visíveis nas paredes.
+
+## Vento (`lib/vegetation.glsl`)
+
+Inclinação lenta + frentes de rajada (~30 blocos entre cristas) + tremor
+rápido. Folhas usam fase por vértice em espaço de mundo (vértices
+compartilhados se movem juntos, sem frestas). A mesma função é usada no passe
+de sombras, então as sombras das plantas acompanham o movimento.
+
 ## Água (`lib/water.glsl`)
 
 - Só a face de cima da água vanilla (`gentleUp > 0.8`) recebe o efeito;
   cachoeiras e fluidos de mods ficam com a aparência original.
-- Normais de onda analíticas com harmônicas que somem antes do limite de
-  Nyquist (sem cintilação à distância).
+- Normais de onda analíticas com cinco harmônicas (mais uma com chuva) que
+  somem antes do limite de Nyquist (sem cintilação à distância).
+- Brilho do sol em dois lóbulos: largo (expoente 96) e o disco do sol
+  (expoente 900), que vira cintilação nas ondas.
 - Profundidade = distância entre a superfície e o leito opaco (`depthtex1`).
   Ajusta alpha (raso mais claro, fundo até 0.88) e escurece levemente a cor.
 - Reflexo: marcha em espaço de tela com 12 ou 24 passos e refinamento binário;

@@ -23,6 +23,15 @@ vec3 gentleWaveNormal(vec2 position, vec2 pixelDx, vec2 pixelDy) {
     vec2 slope = a * (cos(dot(position, a) + t * 172.0) * 0.11 * resolved.x)
         + b * (cos(dot(position, b) - t * 131.0) * 0.07 * resolved.y)
         + c * (cos(dot(position, c) + t * 233.0) * 0.018 * resolved.z);
+    // Fine ripples close to the camera; rain roughens them further.
+    float rain = clamp(wetness, 0.0, 1.0);
+    vec2 d = vec2(2.9, 1.7), e = vec2(-2.1, 3.6), f = vec2(5.3, -4.7);
+    vec3 fine = max(abs(vec3(dot(pixelDx, d), dot(pixelDx, e), dot(pixelDx, f))),
+        abs(vec3(dot(pixelDy, d), dot(pixelDy, e), dot(pixelDy, f))));
+    vec3 fineResolved = vec3(1.0) - smoothstep(vec3(1.0), vec3(3.14159265), fine);
+    slope += (d * (cos(dot(position, d) + t * 410.0) * 0.010 * fineResolved.x)
+        + e * (cos(dot(position, e) - t * 347.0) * 0.008 * fineResolved.y)) * (1.0 + rain * 1.5)
+        + f * (cos(dot(position, f) + t * 900.0) * 0.007 * rain * fineResolved.z);
     return normalize(vec3(-slope.x * WATER_STRENGTH, 1.0, -slope.y * WATER_STRENGTH));
 }
 
@@ -133,8 +142,12 @@ vec4 gentleWaterSurface(vec3 nativeColor, vec3 smoothColor, float opacity, vec3 
     float reflectivity = min(fresnel * strength / max(alpha, 0.25), 0.80);
     vec3 color = mix(base, reflection, reflectivity);
     vec3 halfVector = normalize(eye + gentleSunDirection() + vec3(0.0, 0.00001, 0.0));
-    float specular = pow(max(dot(normal, halfVector), 0.0), 96.0);
-    float glint = specular * 0.10 * strength * day;
+    float facingSun = max(dot(normal, halfVector), 0.0);
+    // A broad sheen plus a sharp reflection of the sun disc that breaks into
+    // sparkles on the waves. Rain clouds hide the sharp part.
+    float specular = pow(facingSun, 96.0) * 0.10
+        + pow(facingSun, 900.0) * 0.85 * (1.0 - clamp(wetness, 0.0, 1.0));
+    float glint = specular * strength * day;
     // Reuse the geometric receiver's shadow for the glint: no second PCF
     // lookup, and wave normals cannot move the receiver bias through a wall.
     color += vec3(1.0, 0.94, 0.83) * glint * visibility / max(alpha, 0.25);

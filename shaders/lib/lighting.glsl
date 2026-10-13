@@ -106,7 +106,8 @@ float gentleSunVisibility(vec3 relativePosition, vec3 normal, float material, fl
     return access * gentleSunVisibility(relativePosition, n, plant, gradient);
 }
 
-vec3 gentleSunlight(vec3 color, vec3 normal, float influence, float material, float visibility) {
+vec3 gentleSunlight(vec3 color, vec3 relativePosition, vec3 normal,
+    float influence, float material, float visibility) {
     // Time is uniform across the draw, so this avoids all nighttime work.
     if (SUNLIGHT_STRENGTH <= 0.0 || gentleDay() <= 0.0) return color;
     vec3 n = normalize(normal + vec3(0.0, 0.00001, 0.0));
@@ -120,8 +121,21 @@ vec3 gentleSunlight(vec3 color, vec3 normal, float influence, float material, fl
     vec3 shaded = plant ? vec3(0.80, 0.86, 0.93) : vec3(0.75, 0.82, 0.91);
     vec3 lighting = mix(shaded, sunlit, visibility);
     lighting *= 0.91 + 0.15 * diffuse;
+    bool foliage = material > 10000.5 && material < 10003.5;
+    if (foliage) {
+        // Sunlit leaves and grass glow a little when seen against the sun,
+        // as light passes through thin blades. Shaded foliage does not.
+        float backlit = pow(max(dot(normalize(relativePosition), gentleSunDirection()), 0.0), 4.0);
+        lighting += vec3(0.16, 0.20, 0.04) * backlit * visibility;
+    }
     // Overcast light is diffuse: shadows fade out with rain.
     lighting = mix(lighting, vec3(0.97, 0.98, 1.0), clamp(wetness, 0.0, 1.0) * 0.85);
-    return color * mix(vec3(1.0), lighting, influence * SUNLIGHT_STRENGTH);
+    color *= mix(vec3(1.0), lighting, influence * SUNLIGHT_STRENGTH);
+    if (foliage) {
+        // A touch more saturation for sunlit vegetation only.
+        float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
+        color = max(mix(vec3(luma), color, 1.0 + 0.10 * visibility * influence * SUNLIGHT_STRENGTH), 0.0);
+    }
+    return color;
 }
 #endif

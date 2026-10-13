@@ -3,11 +3,12 @@
 #if defined(GENTLE_TERRAIN) || defined(GENTLE_WATER) || defined(GENTLE_RECEIVER)
 #include "/lib/lighting.glsl"
 #include "/lib/local_lights.glsl"
-uniform vec3 cameraPosition;
 #endif
+uniform vec3 cameraPosition;
 #include "/lib/foliage.glsl"
 uniform sampler2D texture;
 uniform sampler2D lightmap;
+#include "/lib/blocklight.glsl"
 #ifdef GENTLE_WATER
 #include "/lib/water.glsl"
 #endif
@@ -52,7 +53,10 @@ void main() {
     vec4 color = atlas * gentleColor;
 #endif
 #ifdef GENTLE_LIT
-    vec3 light = texture2D(lightmap, gentleLightUV).rgb;
+    // Held light sources raise the block-light level around the player; the
+    // result is graded towards warm, gently flickering torch light.
+    vec2 lightUV = gentleHeldLight(gentleLightUV, gentleWorld - cameraPosition);
+    vec3 light = gentleBlockLight(texture2D(lightmap, lightUV).rgb, lightUV, gentleWorld);
     color.rgb *= light;
 #endif
 #ifdef GENTLE_WATER
@@ -78,11 +82,12 @@ void main() {
         float darkFace = 1.0 - clamp(max(gentleColor.r, max(gentleColor.g, gentleColor.b)), 0.0, 1.0);
         color.rgb *= 1.0 + darkFace * SHADE_SOFTNESS * influence;
         // Sun-facing surfaces and cast shadows now have a distinct response.
-        color.rgb = gentleSunlight(color.rgb, gentleNormal, influence, gentleMaterial, sunVisibility);
+        color.rgb = gentleSunlight(color.rgb, gentleWorld - cameraPosition, gentleNormal,
+            influence, gentleMaterial, sunVisibility);
         // Angelica 2.2.28 exposes entity-eye cameraPosition in both views.
         // Subtracting inverse-modelview translation would move the voxel grid
         // with the third-person camera and duplicate the renderer's own fix.
-        color.rgb = gentleLocalLights(color.rgb, gentleWorld, gentleNormal, gentleLightUV.x, gentleLightUV.y);
+        color.rgb = gentleLocalLights(color.rgb, gentleWorld, gentleNormal, lightUV.x, lightUV.y);
     }
 #endif
 #if defined(GENTLE_WATER) && WATER_EFFECT == 1

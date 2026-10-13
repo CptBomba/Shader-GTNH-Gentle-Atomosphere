@@ -17,11 +17,17 @@ luz das tochas e as máquinas continuam como você conhece. O que muda é a atmo
   terreno, da vegetação, do jogador, de mobs e de blocos especiais. As sombras
   têm tom azulado de céu, nunca preto. Interiores, cavernas e bases ficam livres
   de vazamento de luz.
-- **Água:** ondas contínuas, reflexo do céu e do cenário visível, brilho do sol
-  e noção de profundidade: margens rasas mais transparentes, água funda mais
-  densa e azul.
-- **Vegetação viva:** grama, flores, plantações e folhas balançam com o vento,
-  com a base da planta presa ao chão e o movimento diminuindo à distância.
+- **Água:** ondas contínuas com ondulações finas de perto (mais agitadas na
+  chuva), reflexo do céu e do cenário visível, reflexo do sol que cintila nas
+  ondas e noção de profundidade: margens rasas mais transparentes, água funda
+  mais densa e azul.
+- **Vegetação viva:** grama, flores (inclusive Botania e Biomes O' Plenty),
+  plantações e folhas balançam com o vento. Rajadas percorrem os campos em
+  ondas, as folhas farfalham, as vitórias-régias boiam e o vento aumenta na
+  chuva. Contra o sol, folhas e grama ficam levemente translúcidas.
+- **Tochas e lâmpadas:** luz artificial mais quente e viva, mais forte perto da
+  chama, com uma leve tremulação. Segurar uma tocha (ou qualquer item que
+  emita luz) ilumina ao seu redor.
 - **Imagem:** FXAA, nitidez adaptativa sem halos, bloom discreto e compressão
   dos tons muito claros.
 - **Seguro para o modpack:** Nether, End e dimensões de mods (Galacticraft,
@@ -54,14 +60,14 @@ arquivo `.txt` com o mesmo nome do pack na pasta `shaderpacks`.
 
 ## Perfis
 
-| Perfil | Para quem | Sombras | Nuvens | Água |
-|---|---|---|---|---|
-| **Minimal** | PCs modestos, bases enormes | Desligadas (só sombreamento direcional) | Simples | Original do jogo |
-| **Natural** *(padrão)* | Equilíbrio entre beleza e FPS | Suaves, 64 blocos | Formações variadas | Ondas, reflexos (12 passos), profundidade |
-| **Atmospheric** | Capturas de tela, PCs folgados | Mais suaves | Duas camadas | Reflexos detalhados (24 passos) |
+| Perfil | Para quem | Sombras | Nuvens | Água | Tochas |
+|---|---|---|---|---|---|
+| **Minimal** | PCs modestos, bases enormes | Desligadas (só sombreamento direcional) | Simples | Original do jogo | Levemente quentes, sem tremulação |
+| **Natural** *(padrão)* | Equilíbrio entre beleza e FPS | Suaves, 64 blocos | Formações variadas | Ondas, reflexos (12 passos), profundidade | Quentes, tremulação leve |
+| **Atmospheric** | Capturas de tela, PCs folgados | Mais suaves | Duas camadas | Reflexos detalhados (24 passos) | Bem quentes, tremulação leve |
 
 Todas as opções podem ser ajustadas individualmente nos submenus *Nuvens*,
-*Vegetação*, *Luz e sombras*, *Água e reflexos*, *Nitidez e brilho* e
+*Vegetação*, *Luz e sombras*, *Tochas e lâmpadas*, *Água e reflexos*, *Nitidez e brilho* e
 *Compatibilidade*. Os menus estão em português e inglês.
 
 ### Dicas de desempenho
@@ -85,13 +91,19 @@ nuvens* escolha *Nativo*. *Qualidade das nuvens → Desligadas* esconde as nuven
 Superfície pelo bioma. Se alguma dimensão reutiliza biomas da Superfície, desligue
 *Compatibilidade → Atmosfera terrestre*.
 
+**Não gosto da luz piscando / da cor quente.** Em *Tochas e lâmpadas*, desligue
+*Tremulação das tochas* ou baixe *Calor da luz das tochas* (0 = luz vanilla).
+
 **Reflexos somem na borda da tela.** É uma limitação dos reflexos em tela (SSR):
 só aparece o que está visível. Fora da tela, a água reflete o céu.
 
 ## Limitações conhecidas
 
-- Plantas duplas (girassol, grama alta dupla), trepadeiras e plantas de mods não
-  mapeadas ficam paradas, para evitar deformar blocos que não são plantas.
+- Plantas duplas (girassol, grama alta dupla), trepadeiras, cana e plantas de
+  mods não mapeadas ficam paradas, para evitar deformar blocos que não são
+  plantas.
+- A luz na mão não é bloqueada por paredes (ilumina até ~15 blocos em volta) e
+  não é vista pelos outros jogadores: é só um efeito visual seu.
 - Sombras projetadas alcançam 64 blocos; depois disso o terreno fica iluminado
   por igual.
 - *Sombras de luzes locais* é uma opção experimental que depende de um mod
@@ -144,8 +156,10 @@ licença e os créditos.
 (Minecraft 1.7.10 + Angelica 2.2.28+). It makes the world prettier and more alive
 while keeping the vanilla look: soft sky gradient, blocky bevelled clouds that glow
 near the sun, soft sky-tinted sun shadows with no indoor light leaks, waving water
-with screen-space reflections and depth (clear shores, deeper water), wind on
-grass, flowers, crops and leaves, plus FXAA, adaptive sharpening and subtle bloom.
+with fine ripples, sun sparkles, screen-space reflections and depth (clear
+shores, deeper water), rolling wind gusts on grass, flowers, crops and leaves,
+warm gently flickering torch light, light from held torches, plus FXAA,
+adaptive sharpening and subtle bloom.
 Nether, End and modded dimensions keep native rendering; machines, cables and mod
 fluids are never altered.
 

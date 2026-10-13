@@ -53,6 +53,9 @@ def profiles(opts):
         result[name] = dict(item.split(":") for item in body.split())
     result["AllLowest"] = {k: v[1][0] for k, v in opts.items()}
     result["AllHighest"] = {k: v[1][-1] for k, v in opts.items()}
+    defaults = {k: v[0] for k, v in opts.items()}
+    if "Natural" in result and result["Natural"] != defaults:
+        raise RuntimeError("profile Natural must match the defaults in lib/settings.glsl")
     for name, profile in result.items():
         for key, value in profile.items():
             if key not in opts:

@@ -2,7 +2,7 @@
 #define GENTLE_SETTINGS
 // Numeric options are intentionally compatible with Angelica beta66b.
 #define VEGETATION_SWAY 1 // [0 1]
-#define WIND_STRENGTH 0.55 // [0.0 0.25 0.40 0.55 0.75 1.0]
+#define WIND_STRENGTH 0.75 // [0.0 0.25 0.40 0.55 0.75 1.0]
 #define MOD_LEAVES 1 // [0 1]
 #define MOD_FLOWERS 1 // [0 1]
 #define FOLIAGE_FILTER 1 // [0 1]
@@ -19,6 +19,9 @@
 #define SHADOW_SOFTNESS 1.0 // [0.6 1.0 1.4 1.8]
 #define SHADOW_BIAS 1.0 // [0.6 1.0 1.4 2.0]
 #define LOCAL_LIGHT_SHADOWS 0 // [0 1 2]
+#define BLOCKLIGHT_WARMTH 0.60 // [0.0 0.30 0.60 0.90]
+#define TORCH_FLICKER 1 // [0 1]
+#define HANDHELD_LIGHT 1 // [0 1]
 #define WATER_STRENGTH 0.65 // [0.0 0.35 0.65 1.0]
 #define WATER_EFFECT 1 // [0 1]
 #define WATER_REFLECTIONS 1 // [0 1 2]

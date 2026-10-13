@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.7.0
+
+### Vegetação
+- Rajadas de vento que percorrem os campos em ondas, tremor contínuo das
+  folhas e lâminas de grama, vento mais forte na chuva. Vento padrão do
+  perfil Natural de 0,55 para 0,75 (Atmospheric 1,0).
+- Folhas e grama ficam levemente translúcidas contra o sol, e a vegetação
+  ao sol ganha um pouco de saturação.
+- Novos blocos com vento: arbusto seco, flores e folhagens do Biomes O'
+  Plenty (`flowers`, `flowers2`, `foliage`). Vitórias-régias boiam na água.
+
+### Água e reflexos
+- Ondulações finas perto da câmera, mais agitadas na chuva.
+- Reflexo nítido do sol que cintila nas ondas, além do brilho largo.
+
+### Tochas e luz artificial
+- Novo menu *Tochas e lâmpadas*.
+- Luz de tochas, lâmpadas e lava mais quente e um pouco mais forte perto da
+  fonte, sem alterar a luz do dia ao ar livre nem a cor das próprias fontes.
+- Tremulação leve e irregular da luz (cada ambiente oscila de forma
+  independente). Desligável.
+- Luz na mão: segurar tocha, glowstone ou qualquer item que emita luz
+  ilumina ao redor do jogador.
+- *Sombras de luzes locais* (experimental) foi para o menu novo.
+
 ## 0.6.0
 
 Primeira versão pública no GitHub.
