@@ -18,7 +18,7 @@
 #define SHADOWS 1 // [0 1]
 #define SHADOW_SOFTNESS 1.0 // [0.6 1.0 1.4 1.8]
 #define SHADOW_BIAS 1.0 // [0.6 1.0 1.4 2.0]
-#define LOCAL_LIGHT_SHADOWS 1 // [0 1 2]
+#define LOCAL_LIGHT_SHADOWS 0 // [0 1 2]
 #define WATER_STRENGTH 0.65 // [0.0 0.35 0.65 1.0]
 #define WATER_EFFECT 1 // [0 1]
 #define WATER_REFLECTIONS 1 // [0 1 2]

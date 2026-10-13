@@ -6,6 +6,14 @@ float gentleShapeHash(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
 }
 
+float gentleShapeNoise(vec2 p) {
+    vec2 cell = floor(p);
+    vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(gentleShapeHash(cell), gentleShapeHash(cell + vec2(1.0, 0.0)), f.x),
+        mix(gentleShapeHash(cell + vec2(0.0, 1.0)), gentleShapeHash(cell + vec2(1.0)), f.x), f.y);
+}
+
 vec3 gentleCloudInverse(vec3 direction) {
     return mix(vec3(-1.0), vec3(1.0), step(vec3(0.0), direction))
         / max(abs(direction), vec3(0.00001));
@@ -110,7 +118,7 @@ void gentleNearestCloud(inout vec4 nearest, inout float density,
     }
 }
 
-void gentleCloudLayer(vec3 origin, vec3 direction, float altitude, float layer,
+void gentleCloudLayer(vec3 origin, vec3 direction, vec3 sun, float altitude, float layer,
     vec3 backdrop, out vec4 cloud, out float distance) {
     cloud = vec4(0.0);
     distance = 1e20;
@@ -143,16 +151,20 @@ void gentleCloudLayer(vec3 origin, vec3 direction, float altitude, float layer,
             float formationPatch = gentleShapeHash(floor(seed / 4.0) + vec2(55.0, 17.0));
             float localCoverage = clamp(coverage + (formationPatch - 0.5) * 0.42, 0.1, 0.97);
             if (r > localCoverage + 0.03) continue;
-            float formationDensity = 1.0 - smoothstep(localCoverage - 0.06, localCoverage + 0.03, r);
+            // Formations at the coverage threshold shrink rather than turning
+            // into translucent glass blocks; only the smallest ones fade.
+            float formationGrowth = 1.0 - smoothstep(localCoverage - 0.06, localCoverage + 0.03, r);
+            float formationDensity = smoothstep(0.0, 0.30, formationGrowth);
+            float formationScale = mix(0.45, 1.0, formationGrowth);
             float rx = gentleShapeHash(seed + vec2(3.1, 7.7));
             float rz = gentleShapeHash(seed + vec2(11.4, 2.3));
             float shape = gentleShapeHash(seed + vec2(21.8, 32.5));
             float offsetX = gentleShapeHash(seed + vec2(37.0, 13.0)) - 0.5;
             float offsetZ = gentleShapeHash(seed + vec2(19.0, 41.0)) - 0.5;
-            float width = mix(38.0, 110.0, rx);
-            float depth = mix(30.0, 90.0, rz);
+            float width = mix(38.0, 110.0, rx) * formationScale;
+            float depth = mix(30.0, 90.0, rz) * formationScale;
             float breathe = 1.0 + 0.035 * sin(frameTimeCounter * GENTLE_TAU * 24.0 / 3600.0 + shape * GENTLE_TAU);
-            float height = mix(6.0, 17.0, shape) * breathe;
+            float height = mix(6.0, 17.0, shape) * breathe * mix(0.7, 1.0, formationGrowth);
             float side = rx < 0.5 ? -1.0 : 1.0;
             vec3 center = vec3((cell.x + 0.5) * 128.0 + offsetX * 92.0,
                 altitude + (r - 0.5) * 36.0,
@@ -198,11 +210,20 @@ void gentleCloudLayer(vec3 origin, vec3 direction, float altitude, float layer,
     // Distinct top, side and underside tones provide visible, restrained depth.
     vec3 face = mix(vec3(0.90, 0.94, 0.97), vec3(1.0, 0.985, 0.95), top);
     face = mix(face, vec3(0.72, 0.79, 0.85), bottom * 0.90);
-    face *= 0.94 + 0.06 * max(nearest.x * 0.7 + nearest.z * 0.3, 0.0);
+    // Faces turned to the real sun are a touch brighter than the far side.
+    face *= 0.93 + 0.09 * max(dot(nearest.xyz, sun), 0.0) * daylight;
+    // Soft large-scale mottling: the cubic silhouette stays, the surface is
+    // no longer a flat plastic color. One value-noise lookup per sky pixel.
+    vec3 hit = shiftedOrigin + direction * distance;
+    face *= 0.92 + 0.12 * gentleShapeNoise(hit.xz * 0.045 + hit.y * 0.11 + layer * 7.0);
     face = mix(face * vec3(0.25, 0.32, 0.43), face, daylight);
     face = mix(face, face * vec3(1.06, 0.90, 0.78), gentleTwilight() * 0.42);
     face += vec3(0.16, 0.095, 0.045) * gentleTwilight();
-    face = mix(face, face * vec3(0.86, 0.89, 0.93), weather * 0.7);
+    // Rain clouds turn a soft grey; nothing becomes a storm wall.
+    face = mix(face, face * vec3(0.70, 0.73, 0.78), weather * 0.75);
+    // Clouds around the sun glow warmly, most at sunrise and sunset.
+    float scatter = pow(max(dot(direction, sun), 0.0), 6.0);
+    face += vec3(1.0, 0.84, 0.62) * scatter * (0.08 + 0.40 * gentleTwilight()) * sqrt(daylight) * (1.0 - weather);
     float haze = (1.0 - exp(-distance * 0.00075)) * 0.74;
     face = mix(face, backdrop, haze);
     float edgeFade = smoothstep(0.065, 0.16, abs(direction.y));
@@ -212,15 +233,16 @@ void gentleCloudLayer(vec3 origin, vec3 direction, float altitude, float layer,
     cloud = vec4(face, opacity);
 }
 
-vec3 gentleCloudField(vec3 background, vec3 origin, vec3 direction) {
+vec3 gentleCloudField(vec3 background, vec3 origin, vec3 direction, vec3 sunDirection) {
 #if CLOUD_STYLE == 1 && CLOUD_QUALITY > 0
     vec4 lowCloud;
     float lowDistance;
-    gentleCloudLayer(origin, direction, float(CLOUD_HEIGHT), 0.0, background, lowCloud, lowDistance);
+    vec3 sun = normalize(sunDirection + vec3(0.0, 0.00001, 0.0));
+    gentleCloudLayer(origin, direction, sun, float(CLOUD_HEIGHT), 0.0, background, lowCloud, lowDistance);
 #if CLOUD_QUALITY >= 3
     vec4 highCloud;
     float highDistance;
-    gentleCloudLayer(origin, direction, float(CLOUD_HEIGHT) + 42.0, 1.0, background, highCloud, highDistance);
+    gentleCloudLayer(origin, direction, sun, float(CLOUD_HEIGHT) + 42.0, 1.0, background, highCloud, highDistance);
     if (highDistance > lowDistance) {
         background = mix(background, highCloud.rgb, highCloud.a);
         background = mix(background, lowCloud.rgb, lowCloud.a);

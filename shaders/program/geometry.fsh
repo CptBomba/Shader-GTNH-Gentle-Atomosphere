@@ -30,19 +30,11 @@ uniform int renderStage;
 #endif
 
 void main() {
-    // PCF derivatives must execute before any alpha discard or varying water
-    // branch. A single geometric visibility also serves the water's sun glint.
+    // Shadow-plane derivatives must execute before any alpha discard or
+    // varying branch. One geometric visibility also serves the water's glint.
 #if defined(GENTLE_TERRAIN) || defined(GENTLE_WATER) || defined(GENTLE_RECEIVER)
-    float sunVisibility = 1.0;
-    bool needsSunVisibility = SUNLIGHT_STRENGTH > 0.0;
-#if defined(GENTLE_WATER) && WATER_EFFECT == 1
-    needsSunVisibility = needsSunVisibility || WATER_STRENGTH > 0.0;
-#endif
-    if (needsSunVisibility && gentleEarth() && gentleDay() > 0.0) {
-        bool plant = gentleMaterial > 10001.5 && gentleMaterial < 10003.5;
-        vec3 n = normalize(gentleNormal + vec3(0.0, 0.00001, 0.0));
-        sunVisibility = gentleSunVisibility(gentleWorld - cameraPosition, n, plant);
-    }
+    float sunVisibility = gentleSunVisibility(gentleWorld - cameraPosition, gentleNormal,
+        gentleMaterial, gentleLightUV.y);
 #endif
 #if defined(GENTLE_WATER) && WATER_EFFECT == 1
     vec2 waterDx = dFdx(gentleWorld.xz), waterDy = dFdy(gentleWorld.xz);
@@ -86,8 +78,7 @@ void main() {
         float darkFace = 1.0 - clamp(max(gentleColor.r, max(gentleColor.g, gentleColor.b)), 0.0, 1.0);
         color.rgb *= 1.0 + darkFace * SHADE_SOFTNESS * influence;
         // Sun-facing surfaces and cast shadows now have a distinct response.
-        color.rgb = gentleSunlight(color.rgb, gentleWorld - cameraPosition,
-            gentleNormal, influence, gentleMaterial, sunVisibility);
+        color.rgb = gentleSunlight(color.rgb, gentleNormal, influence, gentleMaterial, sunVisibility);
         // Angelica 2.2.28 exposes entity-eye cameraPosition in both views.
         // Subtracting inverse-modelview translation would move the voxel grid
         // with the third-person camera and duplicate the renderer's own fix.
@@ -100,7 +91,7 @@ void main() {
         // and the same solar grading; the repeating atlas contrast is adjustable.
         vec3 smoothWater = vec3(0.12, 0.34, 0.43) * gentleColor.rgb * light;
         smoothWater *= clamp(color.rgb / max(nativeWater, vec3(0.01)), vec3(0.5), vec3(1.5));
-        color.rgb = gentleWaterSurface(color.rgb, smoothWater, color.a, gentleWorld, gentleView,
+        color = gentleWaterSurface(color.rgb, smoothWater, color.a, gentleWorld, gentleView,
             gentleLightUV.y, waterDx, waterDy, sunVisibility);
     }
 #endif

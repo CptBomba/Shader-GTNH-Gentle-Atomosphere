@@ -24,10 +24,11 @@ void main() {
     if (gentleEarth() && isEyeInWater == 0 && depth >= 1.0) {
         vec4 view = gbufferProjectionInverse * vec4(gentleScreenUV * 2.0 - 1.0, 1.0, 1.0);
         vec3 direction = normalize(mat3(gbufferModelViewInverse) * (view.xyz / max(abs(view.w), 0.00001)));
+        vec3 sunDirection = mat3(gbufferModelViewInverse) * sunPosition;
         if (SKY_STRENGTH > 0.0)
-            scene.rgb = gentleSkyGradient(scene.rgb, direction, mat3(gbufferModelViewInverse) * sunPosition, 0.0)
+            scene.rgb = gentleSkyGradient(scene.rgb, direction, sunDirection, 0.0)
                 + texture2D(colortex1, gentleScreenUV).rgb;
-        scene.rgb = gentleCloudField(scene.rgb, cameraPosition, direction);
+        scene.rgb = gentleCloudField(scene.rgb, cameraPosition, direction, sunDirection);
     }
     gl_FragData[0] = scene;
     // Immutable opaque/sky snapshot: water reads colortex4 and writes only 0.
