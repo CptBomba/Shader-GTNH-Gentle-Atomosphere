@@ -19,6 +19,8 @@ Mais bonito e com mais vida, sem mudar a cara do jogo.
 
 Criado por **[CptBomba](https://github.com/CptBomba)** (Capitão Bomba)
 
+![Discord: capitaobomba](https://img.shields.io/badge/Discord-capitaobomba-5865F2?logo=discord&logoColor=white)
+
 </div>
 
 Shaderpack leve para **GregTech: New Horizons 2.9** (Minecraft 1.7.10 + Angelica).
@@ -195,7 +197,8 @@ Release é criada automaticamente com o ZIP e as notas daquela versão
 (`tools/release_notes.py`). Histórico completo no [CHANGELOG](CHANGELOG.md).
 
 Relatos de problemas são bem-vindos nas
-[Issues](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/issues).
+[Issues](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/issues) ou
+no Discord (`capitaobomba`).
 Inclua uma captura de tela, o perfil usado, a versão do GTNH/Angelica e sua placa
 de vídeo.
 
@@ -204,6 +207,9 @@ de vídeo.
 **GTNH Gentle Atmosphere** é criado e mantido por
 **[CptBomba](https://github.com/CptBomba)** (Capitão Bomba): ideia, direção
 visual e testes no GTNH.
+
+💬 **Discord:** `capitaobomba`. Chame para dúvidas, sugestões ou para
+mostrar suas capturas com o shader.
 
 Agradecimentos à equipe do [GT New Horizons](https://github.com/GTNewHorizons) e
 do [Angelica](https://github.com/GTNewHorizons/Angelica), que tornaram possível
@@ -238,4 +244,4 @@ lowest cost), **Natural** (default), **Atmospheric** (two cloud layers, detailed
 reflections). Menus are available in English and Brazilian Portuguese.
 
 **Credits:** created and maintained by [CptBomba](https://github.com/CptBomba)
-(Capitão Bomba). Licensed under GPL-3.0.
+(Capitão Bomba). Discord: `capitaobomba`. Licensed under GPL-3.0.
