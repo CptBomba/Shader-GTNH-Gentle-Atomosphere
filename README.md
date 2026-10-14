@@ -166,8 +166,9 @@ python3 tools/build.py           # empacota o ZIP
 ```
 
 O GitHub Actions roda a validação e gera o ZIP em cada push. Para publicar uma
-versão, atualize `VERSION` e `CHANGELOG.md` e crie uma tag `vX.Y.Z`: a Release é
-criada automaticamente com o ZIP e as notas daquela versão
+versão, atualize `VERSION` e `CHANGELOG.md` e crie uma tag `vX.Y.Z`, ou rode o
+workflow *Build* manualmente no `main` (*Actions → Build → Run workflow*): a
+Release é criada automaticamente com o ZIP e as notas daquela versão
 (`tools/release_notes.py`). Histórico completo no [CHANGELOG](CHANGELOG.md).
 
 Relatos de problemas são bem-vindos nas
