@@ -27,6 +27,9 @@ Requer GT New Horizons 2.9.x com Angelica 2.2.28 ou mais nova.
 
 ## Novidades
 {match.group(1).rstrip()}
+
+---
+Criado por **[CptBomba](https://github.com/CptBomba)** (Capitão Bomba) · Discord: `capitaobomba` · Licença GPL-3.0
 """)
 
 
