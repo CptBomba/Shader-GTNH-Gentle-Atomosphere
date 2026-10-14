@@ -1,42 +1,61 @@
-# GTNH Gentle Atmosphere
+<div align="center">
+
+# 🌤️ GTNH Gentle Atmosphere
+
+**Shaderpack leve para GregTech: New Horizons 2.9**<br>
+Mais bonito e com mais vida, sem mudar a cara do jogo.
+
+[![Versão](https://img.shields.io/github/v/release/CptBomba/Shader-GTNH-Gentle-Atomosphere?label=vers%C3%A3o&color=4c9be8)](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/CptBomba/Shader-GTNH-Gentle-Atomosphere/total?color=6cc644)](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/releases)
+[![Build](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/actions/workflows/build.yml/badge.svg)](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/actions/workflows/build.yml)
+![GTNH 2.9](https://img.shields.io/badge/GTNH-2.9.x-e8a33d)
+![Minecraft 1.7.10](https://img.shields.io/badge/Minecraft-1.7.10-62b47a)
+![Angelica](https://img.shields.io/badge/Angelica-2.2.28%2B-8a6fd1)
+[![Licença](https://img.shields.io/github/license/CptBomba/Shader-GTNH-Gentle-Atomosphere?color=lightgrey&label=licen%C3%A7a)](LICENSE)
+
+[![Baixar a última versão](https://img.shields.io/badge/%E2%AC%87%20Baixar-%C3%BAltima%20vers%C3%A3o-2ea44f?style=for-the-badge)](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/releases/latest)
+
+<img src="docs/images/rio.jpg" alt="Rio em um bioma temperado com o shader: água azul com reflexos, nuvens em blocos e grama ao vento" width="860">
+
+</div>
 
 Shaderpack leve para **GregTech: New Horizons 2.9** (Minecraft 1.7.10 + Angelica).
 A ideia é simples: deixar o mundo mais bonito e com mais vida **sem mudar a cara do
 jogo** e sem pesar como os shaders "realistas". As texturas, as cores dos biomas, a
 luz das tochas e as máquinas continuam como você conhece. O que muda é a atmosfera.
 
-> *English summary at the end of this page.*
+> 🇺🇸 *English summary at the end of this page.*
 
 ## O que ele faz
 
-- **Céu e nuvens:** gradiente de céu suave que acompanha a hora do dia e a chuva.
+- ☁️ **Céu e nuvens:** gradiente de céu suave que acompanha a hora do dia e a chuva.
   Nuvens próprias em blocos chanfrados, no estilo do Minecraft, com variação de
   formato, movimento lento e brilho quente perto do sol no nascer e no pôr do sol.
   Na chuva elas ficam acinzentadas.
-- **Noite e estrelas:** a noite deixa de ser um breu: céu e horizonte em azul
+- 🌙 **Noite e estrelas:** a noite deixa de ser um breu: céu e horizonte em azul
   noturno, brilho em volta da lua e um luar azulado e suave ao ar livre que
   acompanha a fase da lua. Cavernas e salas continuam escuras. Estrelas
   próprias, com tamanhos e cores variados, cintilação suave e uma Via Láctea
   discreta.
-- **Sol e sombras:** sombras projetadas suaves (mapa 2048, até 64 blocos) do
+- ☀️ **Sol e sombras:** sombras projetadas suaves (mapa 2048, até 64 blocos) do
   terreno, da vegetação, do jogador, de mobs e de blocos especiais. As sombras
   têm tom azulado de céu, nunca preto. Interiores, cavernas e bases ficam livres
   de vazamento de luz.
-- **Água:** ondas contínuas com ondulações finas de perto (mais agitadas na
+- 💧 **Água:** ondas contínuas com ondulações finas de perto (mais agitadas na
   chuva), reflexo do céu e do cenário visível, reflexo do sol que cintila nas
   ondas e noção de profundidade: margens rasas mais transparentes, água funda
   mais densa e azul.
-- **Vegetação viva:** grama, flores (inclusive Botania e Biomes O' Plenty),
+- 🌿 **Vegetação viva:** grama, flores (inclusive Botania e Biomes O' Plenty),
   plantações e folhas balançam com o vento. Rajadas percorrem os campos em
   ondas, as folhas farfalham, as vitórias-régias boiam e o vento aumenta na
   chuva. Contra o sol, folhas e grama ficam levemente translúcidas.
-- **Tochas e lâmpadas:** luz artificial mais quente, mais forte perto da
+- 🔥 **Tochas e lâmpadas:** luz artificial mais quente, mais forte perto da
   chama e estável nas paredes. As chamas de tochas, fogo, lava, glowstone e as
   partículas de chama ganham um halo suave e tremulam, cada uma no seu ritmo.
   Segurar uma tocha (ou qualquer item que emita luz) ilumina ao seu redor.
-- **Imagem:** FXAA, nitidez adaptativa sem halos, bloom discreto e compressão
+- 🖼️ **Imagem:** FXAA, nitidez adaptativa sem halos, bloom discreto e compressão
   dos tons muito claros.
-- **Seguro para o modpack:** Nether, End e dimensões de mods (Galacticraft,
+- 🛡️ **Seguro para o modpack:** Nether, End e dimensões de mods (Galacticraft,
   GalaxySpace etc.) ficam com a renderização original. Máquinas, cabos, fluidos
   de mods e blocos desconhecidos não são deformados nem recoloridos.
 
@@ -53,8 +72,9 @@ ou progressão.
 
 ## Instalação
 
-1. Baixe o arquivo `GTNH-Gentle-Atmosphere-x.y.z.zip` na página de
-   [Releases](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/releases).
+1. Baixe o arquivo `GTNH-Gentle-Atmosphere-x.y.z.zip` da
+   [última versão](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/releases/latest)
+   (em *Assets*).
 2. Coloque o ZIP, **sem descompactar**, na pasta `shaderpacks` da instância
    (ex.: `.minecraft/shaderpacks/`).
 3. No jogo: **Opções → Configurações de vídeo → Shader Packs** e selecione
@@ -135,6 +155,7 @@ shaders/
 tools/
   validate.py          compila todos os programas com todos os perfis
   build.py             gera dist/GTNH-Gentle-Atmosphere-<versão>.zip
+  release_notes.py     texto da Release a partir do CHANGELOG
 docs/TECNICO.md        notas técnicas do pipeline
 ```
 
@@ -145,8 +166,9 @@ python3 tools/build.py           # empacota o ZIP
 ```
 
 O GitHub Actions roda a validação e gera o ZIP em cada push. Para publicar uma
-versão, atualize `VERSION` e `CHANGELOG.md` e crie uma tag `vX.Y.Z`: o ZIP é
-anexado automaticamente à Release.
+versão, atualize `VERSION` e `CHANGELOG.md` e crie uma tag `vX.Y.Z`: a Release é
+criada automaticamente com o ZIP e as notas daquela versão
+(`tools/release_notes.py`). Histórico completo no [CHANGELOG](CHANGELOG.md).
 
 Relatos de problemas são bem-vindos nas
 [Issues](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/issues).
@@ -160,7 +182,7 @@ licença e os créditos.
 
 ---
 
-## English summary
+## 🇺🇸 English summary
 
 **GTNH Gentle Atmosphere** is a lightweight shaderpack for **GT New Horizons 2.9**
 (Minecraft 1.7.10 + Angelica 2.2.28+). It makes the world prettier and more alive

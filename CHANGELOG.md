@@ -2,6 +2,17 @@
 
 ## 0.9.0
 
+Primeira versão publicada para download. Em relação à 0.5.5 (versão
+anterior ao GitHub), o pack ganhou:
+
+- Sombras sem vazamento de luz em interiores e mais leves dentro de bases.
+- Água com profundidade, ondulações finas e reflexo cintilante do sol.
+- Vegetação com rajadas de vento, folhas farfalhando e vitórias-régias.
+- Tochas quentes, chamas com halo e tremulação, e luz da tocha na mão.
+- Noite azul com luar, estrelas próprias e Via Láctea.
+
+Detalhes de cada etapa abaixo.
+
 ### Noite e estrelas
 - A noite não é mais um breu: céu e horizonte azul-noite, brilho suave em
   volta da lua e névoa azulada ao ar livre (no subterrâneo a névoa continua
@@ -63,7 +74,7 @@
 
 ## 0.6.0
 
-Primeira versão pública no GitHub.
+Primeira versão no repositório (sem release publicada).
 
 ### Sombras e luz
 - **Sem vazamento de luz em interiores.** Superfícies que o céu quase não
