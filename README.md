@@ -13,6 +13,11 @@ luz das tochas e as máquinas continuam como você conhece. O que muda é a atmo
   Nuvens próprias em blocos chanfrados, no estilo do Minecraft, com variação de
   formato, movimento lento e brilho quente perto do sol no nascer e no pôr do sol.
   Na chuva elas ficam acinzentadas.
+- **Noite e estrelas:** a noite deixa de ser um breu: céu e horizonte em azul
+  noturno, brilho em volta da lua e um luar azulado e suave ao ar livre que
+  acompanha a fase da lua. Cavernas e salas continuam escuras. Estrelas
+  próprias, com tamanhos e cores variados, cintilação suave e uma Via Láctea
+  discreta.
 - **Sol e sombras:** sombras projetadas suaves (mapa 2048, até 64 blocos) do
   terreno, da vegetação, do jogador, de mobs e de blocos especiais. As sombras
   têm tom azulado de céu, nunca preto. Interiores, cavernas e bases ficam livres
@@ -68,7 +73,7 @@ arquivo `.txt` com o mesmo nome do pack na pasta `shaderpacks`.
 | **Atmospheric** | Capturas de tela, PCs folgados | Mais suaves | Duas camadas | Reflexos detalhados (24 passos) | Bem quentes, halo mais forte |
 
 Todas as opções podem ser ajustadas individualmente nos submenus *Nuvens*,
-*Vegetação*, *Luz e sombras*, *Tochas e lâmpadas*, *Água e reflexos*, *Nitidez e brilho* e
+*Vegetação*, *Luz e sombras*, *Tochas e lâmpadas*, *Noite e estrelas*, *Água e reflexos*, *Nitidez e brilho* e
 *Compatibilidade*. Os menus estão em português e inglês.
 
 ### Dicas de desempenho
@@ -95,6 +100,9 @@ Superfície pelo bioma. Se alguma dimensão reutiliza biomas da Superfície, des
 **Não gosto das chamas tremulando / da cor quente / do halo.** Em *Tochas e
 lâmpadas*, desligue *Tremulação das chamas*, baixe *Calor da luz das tochas*
 (0 = luz vanilla) ou *Brilho das chamas* (0 = sem halo).
+
+**A noite está clara/escura demais.** Ajuste *Noite e estrelas → Luar*
+(0 = noite vanilla). Em *Estrelas* dá para voltar às estrelas vanilla.
 
 **Reflexos somem na borda da tela.** É uma limitação dos reflexos em tela (SSR):
 só aparece o que está visível. Fora da tela, a água reflete o céu.
@@ -156,7 +164,8 @@ licença e os créditos.
 
 **GTNH Gentle Atmosphere** is a lightweight shaderpack for **GT New Horizons 2.9**
 (Minecraft 1.7.10 + Angelica 2.2.28+). It makes the world prettier and more alive
-while keeping the vanilla look: soft sky gradient, blocky bevelled clouds that glow
+while keeping the vanilla look: soft sky gradient, night-blue nights with gentle
+moonlight, custom twinkling stars and a faint Milky Way, blocky bevelled clouds that glow
 near the sun, soft sky-tinted sun shadows with no indoor light leaks, waving water
 with fine ripples, sun sparkles, screen-space reflections and depth (clear
 shores, deeper water), rolling wind gusts on grass, flowers, crops and leaves,

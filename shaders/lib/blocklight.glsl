@@ -19,7 +19,7 @@ float gentleLightCoordinate(float level) {
 // surroundings like a placed block would: one level less per block.
 vec2 gentleHeldLight(vec2 lightUV, vec3 relativePosition) {
 #if HANDHELD_LIGHT == 1
-    float held = float(max(heldBlockLightValue, heldBlockLightValue2));
+    float held = max(float(heldBlockLightValue), float(heldBlockLightValue2));
     if (held > 0.0 && gentleEarth()) {
         float level = held - length(relativePosition);
         lightUV.x = max(lightUV.x, gentleLightCoordinate(level));

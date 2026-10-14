@@ -2,6 +2,7 @@
 #include "/lib/fog.glsl"
 #include "/lib/sky.glsl"
 #include "/lib/cloud_shapes.glsl"
+#include "/lib/stars.glsl"
 uniform sampler2D colortex0;
 uniform sampler2D colortex1;
 // Keep the faint native halo/stars above the precision of an 8-bit mask.
@@ -21,13 +22,16 @@ void main() {
     float depth = texture2D(depthtex0, gentleScreenUV).r;
     // Executed before translucent geometry: glass, fluids and particles render
     // naturally over the sky. Opaque terrain, hands and machines are untouched.
+    vec4 view = gbufferProjectionInverse * vec4(gentleScreenUV * 2.0 - 1.0, 1.0, 1.0);
+    vec3 direction = normalize(mat3(gbufferModelViewInverse) * (view.xyz / max(abs(view.w), 0.00001)));
+    vec3 sunDirection = mat3(gbufferModelViewInverse) * sunPosition;
+    // Stars use screen derivatives, so they are evaluated in uniform control
+    // flow (all pixels, only at night) and kept only on sky pixels below.
+    vec3 stars = gentleStars(direction, sunDirection);
     if (gentleEarth() && isEyeInWater == 0 && depth >= 1.0) {
-        vec4 view = gbufferProjectionInverse * vec4(gentleScreenUV * 2.0 - 1.0, 1.0, 1.0);
-        vec3 direction = normalize(mat3(gbufferModelViewInverse) * (view.xyz / max(abs(view.w), 0.00001)));
-        vec3 sunDirection = mat3(gbufferModelViewInverse) * sunPosition;
         if (SKY_STRENGTH > 0.0)
             scene.rgb = gentleSkyGradient(scene.rgb, direction, sunDirection, 0.0)
-                + texture2D(colortex1, gentleScreenUV).rgb;
+                + texture2D(colortex1, gentleScreenUV).rgb + stars;
         scene.rgb = gentleCloudField(scene.rgb, cameraPosition, direction, sunDirection);
     }
     gl_FragData[0] = scene;

@@ -33,6 +33,8 @@
 #define HIGHLIGHT_COMPRESSION 0.25 // [0.0 0.15 0.25 0.40 0.60]
 #define FOG_STRENGTH 1.1 // [0.8 1.0 1.1 1.2]
 #define EARTH_EFFECTS 1 // [0 1]
+#define NIGHT_BRIGHTNESS 1.0 // [0.0 0.5 1.0 1.5]
+#define STAR_STYLE 2 // [0 1 2]
 // Every temporal frequency completes an integer number of cycles in 3600 s.
 // Angelica resets frameTimeCounter each hour; this avoids an animation jump.
 const float GENTLE_TAU = 6.28318530718;

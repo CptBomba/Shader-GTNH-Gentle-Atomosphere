@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.9.0
+
+### Noite e estrelas
+- A noite não é mais um breu: céu e horizonte azul-noite, brilho suave em
+  volta da lua e névoa azulada ao ar livre (no subterrâneo a névoa continua
+  escura).
+- Luar: superfícies ao ar livre ganham uma luz azulada e suave, com cores um
+  pouco mais frias, como o olho vê à noite. Varia com a fase da lua (lua
+  nova 55%). Cavernas, salas e áreas iluminadas por tochas não mudam.
+- Estrelas próprias no lugar dos quadradinhos vanilla: tamanhos e cores
+  variados (azuladas a amareladas), cintilação suave, somem perto do
+  horizonte e na chuva e giram com o céu. Via Láctea discreta opcional.
+- Nuvens noturnas mais opacas, para as estrelas não aparecerem através delas.
+- Novo menu *Noite e estrelas* com *Luar* (0 a 1,5) e *Estrelas* (vanilla,
+  próprias, próprias + Via Láctea).
+
+### Correções
+- `min`/`max` com inteiros (não existem no GLSL 1.20) trocados por versões
+  com float na luz da mão e no brilho da tocha segurada. Drivers AMD/Intel
+  mais estritos podiam recusar o shader.
+
 ## 0.8.0
 
 ### Tochas e luz artificial

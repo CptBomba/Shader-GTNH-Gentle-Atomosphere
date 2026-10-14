@@ -7,6 +7,8 @@ uniform int biome;
 uniform int worldTime;
 uniform float wetness;
 uniform float frameTimeCounter;
+uniform int moonPhase;
+uniform ivec2 eyeBrightnessSmooth;
 
 bool gentleEarth() {
 #if EARTH_EFFECTS == 1 && !defined(GENTLE_NON_EARTH)
@@ -34,6 +36,22 @@ float gentleDay() {
     // Minecraft's noon is 6000 ticks; civil midnight is 18000.
     float solar = cos((float(worldTime) - 6000.0) * GENTLE_TAU / 24000.0);
     return smoothstep(-0.16, 0.24, solar);
+}
+
+// 0 by day, 1 in full night. Uniform across a frame.
+float gentleNight() {
+    return 1.0 - gentleDay();
+}
+
+// Moonlight follows the lunar cycle: full moon 1.0, new moon 0.55.
+float gentleMoonlight() {
+    float fromFull = min(float(moonPhase), 8.0 - float(moonPhase));
+    return 1.0 - 0.1125 * fromFull;
+}
+
+// Deep night-blue that replaces pure black outdoors; scaled by the option.
+vec3 gentleNightTint() {
+    return vec3(0.020, 0.032, 0.062) * NIGHT_BRIGHTNESS * gentleMoonlight();
 }
 
 float gentleTwilight() {

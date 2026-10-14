@@ -228,7 +228,8 @@ void gentleCloudLayer(vec3 origin, vec3 direction, vec3 sun, float altitude, flo
     face = mix(face, backdrop, haze);
     float edgeFade = smoothstep(0.065, 0.16, abs(direction.y));
     float rangeFade = 1.0 - smoothstep(1100.0, 2500.0, distance);
-    float opacity = mix(0.48, 0.96, daylight) * edgeFade * rangeFade * density;
+    // Night clouds stay mostly opaque so stars do not shine through them.
+    float opacity = mix(0.82, 0.96, daylight) * edgeFade * rangeFade * density;
     if (layer > 0.5) opacity *= 0.78;
     cloud = vec4(face, opacity);
 }

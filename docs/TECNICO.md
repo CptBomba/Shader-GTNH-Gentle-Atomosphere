@@ -105,6 +105,23 @@ a cada 2048 blocos, com 2 a 4 caixas por formação. Iluminação por face (topo
 lado, base), direção do sol, textura de ruído leve, dispersão quente perto do
 sol, névoa pela distância e cobertura que cresce com a chuva.
 
+## Noite (`lib/sky.glsl`, `lib/fog.glsl`, `lib/stars.glsl`)
+
+- `gentleNightTint()`: azul-noite escalado por `NIGHT_BRIGHTNESS` e pela fase
+  da lua (`moonPhase`, cheia 1,0 até nova 0,55). O céu usa o maior entre o
+  gradiente vanilla e esse tom; a névoa da Superfície também, mas só quando a
+  luz do céu nos olhos (`eyeBrightnessSmooth.y`) indica que o jogador está ao
+  ar livre.
+- Luar no terreno: soma `albedo × (0.08, 0.10, 0.15)` e esfria levemente as
+  cores onde a luz do céu é alta e a luz de blocos é baixa.
+- Estrelas: duas camadas numa grade 3D sobre a esfera celeste (densidades 180
+  e 70), gaussiana com tamanho mínimo de ~1 pixel (antisserrilhado por
+  `fwidth`), cor por hash e cintilação de 2 Hz. A direção é girada para o
+  referencial do caminho do sol, então as estrelas giram com o céu. A Via
+  Láctea é uma faixa num grande círculo com ruído e uma terceira camada de
+  estrelas. As estrelas vanilla (`renderStage` 6) deixam de ser acumuladas.
+  Como usam derivadas, as estrelas são calculadas fora de desvios por pixel.
+
 ## Tempo e animação
 
 O Angelica zera `frameTimeCounter` a cada hora. Todas as animações (vento,

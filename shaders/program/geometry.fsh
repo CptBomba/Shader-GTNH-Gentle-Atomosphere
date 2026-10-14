@@ -82,7 +82,7 @@ void main() {
     flicker = gentleFlicker(dot(gentleWorld, vec3(3.1, 2.3, 2.7)), 1.0);
 #elif defined(GENTLE_ENTITY) && !defined(GENTLE_RECEIVER)
     // First-person hand: a held torch keeps its flame alive.
-    glowWeight = max(heldBlockLightValue, heldBlockLightValue2) > 0 ? 0.80 : 0.0;
+    glowWeight = max(float(heldBlockLightValue), float(heldBlockLightValue2)) > 0.0 ? 0.80 : 0.0;
     flicker = gentleFlicker(0.0, 1.0);
 #endif
     if (EMISSIVE_GLOW > 0.0 && glowWeight > 0.0 && gentleEarth()) {
@@ -100,6 +100,7 @@ void main() {
     // result is graded towards warm, gently flickering torch light.
     vec2 lightUV = gentleHeldLight(gentleLightUV, gentleWorld - cameraPosition);
     vec3 light = gentleBlockLight(texture2D(lightmap, lightUV).rgb, lightUV, gentleWorld);
+    vec3 albedo = color.rgb;
     color.rgb *= light;
 #endif
 #ifdef GENTLE_WATER
@@ -131,6 +132,16 @@ void main() {
         // Subtracting inverse-modelview translation would move the voxel grid
         // with the third-person camera and duplicate the renderer's own fix.
         color.rgb = gentleLocalLights(color.rgb, gentleWorld, gentleNormal, lightUV.x, lightUV.y);
+        // Moonlight: outdoors at night the world keeps a soft blue-grey
+        // visibility instead of sinking into black. Caves, rooms and
+        // torch-lit areas are untouched (skylight and block light decide).
+        float moonlit = smoothstep(0.55, 0.95, gentleLightUV.y) * gentleNight() * blockLightProtection;
+        if (NIGHT_BRIGHTNESS > 0.0 && moonlit > 0.0) {
+            float luma = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));
+            // Colors cool and soften a little, as the eye sees them at night.
+            color.rgb = mix(color.rgb, luma * vec3(0.80, 0.92, 1.25), 0.30 * moonlit);
+            color.rgb += albedo * vec3(0.08, 0.10, 0.15) * moonlit * NIGHT_BRIGHTNESS * gentleMoonlight();
+        }
     }
 #endif
 #if defined(GENTLE_WATER) && WATER_EFFECT == 1
@@ -163,6 +174,11 @@ void main() {
     // Native sun/moon/stars use SRC_ALPHA, ONE. Accumulate their RGB on a
     // zero background, never the old sky already blended into colortex0.
     // Zero alpha prevents the sunset fan from altering this independent layer.
+    // Custom stars (STAR_STYLE > 0) replace the vanilla ones: stage 6 is dropped.
+#if STAR_STYLE > 0
+    gl_FragData[1] = renderStage >= 4 && renderStage <= 5 ? color : vec4(0.0);
+#else
     gl_FragData[1] = renderStage >= 4 && renderStage <= 6 ? color : vec4(0.0);
+#endif
 #endif
 }
