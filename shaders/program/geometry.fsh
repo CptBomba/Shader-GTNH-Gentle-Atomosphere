@@ -23,9 +23,16 @@ varying vec3 gentleWorld;
 varying float gentleMaterial;
 varying float gentleUp;
 varying vec3 gentleNormal;
+// Opaque geometry, entities, the hand and particles also write the halo
+// source (colortex5): flames add light there, everything else occludes it.
+#if defined(GENTLE_TERRAIN) || defined(GENTLE_ENTITY) || defined(GENTLE_RECEIVER) || defined(GENTLE_PARTICLES)
+#define GENTLE_GLOW_TARGET
+#endif
 #ifdef GENTLE_SKY_MASK
 uniform int renderStage;
 /* DRAWBUFFERS:01 */
+#elif defined(GENTLE_GLOW_TARGET)
+/* DRAWBUFFERS:05 */
 #else
 /* DRAWBUFFERS:0 */
 #endif
@@ -51,6 +58,42 @@ void main() {
     atlas = gentleFoliage(atlas, gentleMaterial, length(gentleView));
 #endif
     vec4 color = atlas * gentleColor;
+#endif
+#ifdef GENTLE_GLOW_TARGET
+    // Which light sources glow, and how much. Flames brighten and flicker
+    // with their own phase; the same flicker drives their halo.
+    vec3 emissive = vec3(0.0);
+#ifndef GENTLE_BASIC
+    float glowWeight = 0.0;
+    float flicker = 1.0;
+#ifdef GENTLE_TERRAIN
+    vec3 source = floor(gentleWorld + vec3(0.001));
+    float sourcePhase = fract(sin(dot(source, vec3(12.9898, 78.233, 37.719))) * 43758.5453) * GENTLE_TAU;
+    if (abs(gentleMaterial - 10006.0) < 0.25) {
+        glowWeight = 1.0;
+        flicker = gentleFlicker(sourcePhase, 1.0);
+    } else if (abs(gentleMaterial - 10007.0) < 0.25) {
+        glowWeight = 0.40;
+        flicker = gentleFlicker(dot(gentleWorld.xz, vec2(0.21, 0.17)), 0.0);
+    }
+#elif defined(GENTLE_PARTICLES)
+    // Flame and lava particles are drawn fullbright; smoke and dust are not.
+    glowWeight = 0.85 * smoothstep(0.86, 0.92, gentleLightUV.x);
+    flicker = gentleFlicker(dot(gentleWorld, vec3(3.1, 2.3, 2.7)), 1.0);
+#elif defined(GENTLE_ENTITY) && !defined(GENTLE_RECEIVER)
+    // First-person hand: a held torch keeps its flame alive.
+    glowWeight = max(heldBlockLightValue, heldBlockLightValue2) > 0 ? 0.80 : 0.0;
+    flicker = gentleFlicker(0.0, 1.0);
+#endif
+    if (EMISSIVE_GLOW > 0.0 && glowWeight > 0.0 && gentleEarth()) {
+        float flame = gentleFlameMask(atlas.rgb) * glowWeight;
+        color.rgb *= 1.0 + (flicker - 1.0) * 0.6 * flame;
+        // Distant flames cover few pixels; a moderate boost keeps their halo
+        // visible without making them larger than nearby ones.
+        float distanceBoost = 1.0 + min(length(gentleView) / 6.0, 3.0);
+        emissive = atlas.rgb * gentleColor.rgb * flame * flicker * distanceBoost;
+    }
+#endif
 #endif
 #ifdef GENTLE_LIT
     // Held light sources raise the block-light level around the player; the
@@ -108,6 +151,12 @@ void main() {
     color.rgb = gentleFog(color.rgb, gentleView);
 #endif
     gl_FragData[0] = color;
+#ifdef GENTLE_GLOW_TARGET
+#ifndef GENTLE_NO_FOG
+    emissive *= 1.0 - gentleFogFactor(gentleView);
+#endif
+    gl_FragData[1] = vec4(emissive, color.a);
+#endif
 #ifdef GENTLE_SKY_MASK
     // Inspected beta66b WorldRenderingPhase ordinals: SUN=4, MOON=5, STARS=6.
     // Dome, native sunset fan and void plate must not preserve a horizon seam.

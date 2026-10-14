@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.8.0
+
+### Tochas e luz artificial
+- **Corrigido:** o interior de bases piscava. A tremulação foi retirada da luz
+  nas paredes, que agora é estável.
+- **Halo nas chamas:** chamas de tochas (inclusive a tocha de pedra do
+  Tinkers), fogo, lava, glowstone, lâmpada de redstone acesa, fornalha acesa e
+  partículas de chama/lava ganham um brilho quente e suave em volta. Só os
+  texels claros e quentes brilham (o cabo da tocha e a pedra não).
+- As chamas tremulam com brilho próprio, cada tocha no seu ritmo; a lava
+  pulsa devagar. Uma tocha segurada na mão também brilha.
+- Nova opção *Brilho das chamas* (Minimal 0,5, Natural 1,0, Atmospheric 1,5).
+- O bloom passou a ser calculado em 1/4 da resolução, com um halo mais
+  largo e um núcleo estreito, sem custo relevante. Novo passe `composite2`.
+
 ## 0.7.0
 
 ### Vegetação

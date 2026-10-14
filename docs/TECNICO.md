@@ -12,8 +12,9 @@ Minecraft 1.7.10, Angelica 2.2.28 (port do Iris). Todo o código é GLSL 1.20.
 | `gbuffers_terrain/block/entities` | `program/geometry.*` | colortex0 | Lightmap original, tom quente leve, alívio do sombreamento vanilla, sol/sombra, oclusão local opcional |
 | `deferred` | `program/atmosphere.*` | colortex0, colortex4 | Gradiente do céu + astros + nuvens analíticas nos pixels de céu; colortex4 é um snapshot opaco imutável |
 | `gbuffers_water` | `program/geometry.*` + `lib/water.glsl` | colortex0 | Ondas, profundidade, reflexos (SSR em colortex4/depthtex1) e brilho do sol |
-| `composite` / `composite1` | `bloom_extract` / `bloom_blur` | colortex2 / colortex3 | Extração e blur horizontal do bloom (resolução integral) |
-| `final` | `post_final` | tela | FXAA, nitidez adaptativa, blur vertical do bloom e compressão de altas luzes |
+| `composite` | `bloom_extract` | colortex2 | Bloom do que é muito claro + fontes de halo (colortex5), reduzidos a 1/4 no canto inferior esquerdo |
+| `composite1` / `composite2` | `bloom_blur` | colortex3 / colortex6 | Gaussiana separável (sigma 16 px na tela, 13 amostras) só nessa área |
+| `final` | `post_final` | tela | FXAA, nitidez adaptativa, halo (núcleo de colortex2 + halo largo de colortex6) e compressão de altas luzes |
 
 Os pontos de entrada (`gbuffers_*.fsh/.vsh`) apenas definem macros (`GENTLE_LIT`,
 `GENTLE_TERRAIN`, `GENTLE_WATER`, `GENTLE_ENTITY`, `GENTLE_RECEIVER`...) e incluem
@@ -37,6 +38,8 @@ Materiais (`block.properties`, IDs de material, não do registro):
 | 10003 | trigo, cenoura, batata | vento com a base presa |
 | 10004 | água parada e corrente | superfície de água |
 | 10005 | vitória-régia | balanço e flutuação na água |
+| 10006 | tochas (vanilla, redstone, pedra do Tinkers), fogo, glowstone, lâmpada de redstone acesa, fornalha acesa | halo e tremulação nos texels de chama |
+| 10007 | lava | halo mais fraco e pulsação lenta |
 
 O ID 10002 também cobre arbusto seco e as flores/folhagens do Biomes O' Plenty
 (`flowers`, `flowers2`, `foliage`) quando `MOD_FLOWERS=1`.
@@ -65,8 +68,14 @@ O ID 10002 também cobre arbusto seco e as flores/folhagens do Biomes O' Plenty
 - `gentleBlockLight`: compara a luminância só-bloco e só-céu do lightmap. Onde
   a luz artificial domina, aplica um tom âmbar (mais claro perto da chama) e
   um reforço de até 28% no nível 14. O nível 15 (lava, overlays fullbright,
-  a própria fonte) é preservado. A tremulação (±3,5% no máximo) usa fase
-  espacial de comprimento longo para não criar ondas visíveis nas paredes.
+  a própria fonte) é preservado. A luz nas superfícies não tremula: como o
+  lightmap não diz de qual fonte vem a luz, a oscilação fazia o ambiente
+  inteiro piscar junto.
+- Halo: terreno (materiais 10006/10007), partículas fullbright e a mão com
+  item luminoso escrevem em colortex5 os texels claros e quentes
+  (`gentleFlameMask`), com tremulação por bloco (`gentleFlicker`, fase pelo
+  hash da posição) e um reforço moderado com a distância. Terreno, entidades
+  e mão escrevem zero no resto, então objetos na frente tapam o halo.
 
 ## Vento (`lib/vegetation.glsl`)
 
@@ -116,7 +125,7 @@ repositório.
 
 `python3 tools/validate.py` resolve os `#include`, aplica os perfis Minimal,
 Natural e Atmospheric, os valores padrão e as combinações "tudo no mínimo" e
-"tudo no máximo", e compila os 138 pontos de entrada com `glslangValidator`.
+"tudo no máximo", e compila os 144 pontos de entrada com `glslangValidator`.
 Isso garante que o código compila, mas não substitui testar no jogo:
 interiores, nascer/pôr do sol, chuva, água rasa e funda, terceira pessoa e
 desempenho com as mesmas opções.

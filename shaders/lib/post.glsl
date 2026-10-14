@@ -1,7 +1,8 @@
 #ifndef GENTLE_POST
 #define GENTLE_POST
 uniform sampler2D colortex0;
-uniform sampler2D colortex3;
+uniform sampler2D colortex2;
+uniform sampler2D colortex6;
 uniform sampler2D depthtex0;
 uniform mat4 gbufferProjectionInverse;
 uniform float viewWidth;
@@ -62,14 +63,11 @@ vec3 gentlePostImage(vec2 uv) {
 }
 
 vec3 gentleBloom(vec2 uv) {
-    vec2 offset = vec2(0.0, 2.0 / max(viewHeight, 1.0));
-    // Five linear-filtered taps provide a wide Gaussian approximation.
-    vec3 glow = texture2D(colortex3, uv).rgb * 0.227027;
-    glow += texture2D(colortex3, uv + offset * 1.384615).rgb * 0.316216;
-    glow += texture2D(colortex3, uv - offset * 1.384615).rgb * 0.316216;
-    glow += texture2D(colortex3, uv + offset * 3.230769).rgb * 0.070270;
-    glow += texture2D(colortex3, uv - offset * 3.230769).rgb * 0.070270;
-    return min(glow, vec3(0.50)) * BLOOM_STRENGTH;
+    // Bilinear upsample of the quarter-resolution glow: a tight core that
+    // keeps distant flames visible, plus the wide blurred halo (composite2).
+    vec2 quarter = min(uv * 0.25, vec2(0.25) - 0.5 / max(vec2(viewWidth, viewHeight), vec2(1.0)));
+    vec3 glow = texture2D(colortex2, quarter).rgb * 0.35 + texture2D(colortex6, quarter).rgb;
+    return min(glow, vec3(0.6));
 }
 
 vec3 gentleHighlights(vec3 color) {

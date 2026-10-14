@@ -21,6 +21,7 @@
 #define LOCAL_LIGHT_SHADOWS 0 // [0 1 2]
 #define BLOCKLIGHT_WARMTH 0.60 // [0.0 0.30 0.60 0.90]
 #define TORCH_FLICKER 1 // [0 1]
+#define EMISSIVE_GLOW 1.0 // [0.0 0.5 1.0 1.5]
 #define HANDHELD_LIGHT 1 // [0 1]
 #define WATER_STRENGTH 0.65 // [0.0 0.35 0.65 1.0]
 #define WATER_EFFECT 1 // [0 1]

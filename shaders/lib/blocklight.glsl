@@ -29,7 +29,8 @@ vec2 gentleHeldLight(vec2 lightUV, vec3 relativePosition) {
 }
 
 // Warm, slightly brighter pools of light around artificial sources, fading
-// wherever skylight dominates (daylight outdoors stays untouched).
+// wherever skylight dominates (daylight outdoors stays untouched). The light
+// on walls is steady: only flames themselves flicker (see gentleFlicker).
 vec3 gentleBlockLight(vec3 light, vec2 lightUV, vec3 worldPosition) {
     if (BLOCKLIGHT_WARMTH <= 0.0 || !gentleEarth()) return light;
     vec3 luma = vec3(0.2126, 0.7152, 0.0722);
@@ -43,16 +44,29 @@ vec3 gentleBlockLight(vec3 light, vec2 lightUV, vec3 worldPosition) {
     // Hotter and brighter close to the flame, a deeper amber further away.
     vec3 tint = mix(vec3(1.10, 0.90, 0.68), vec3(1.16, 0.97, 0.80), level * level);
     float glow = 1.0 + 0.28 * pow(level, 6.0);
-#if TORCH_FLICKER == 1
-    // A soft, irregular breathing of nearby light. Long spatial wavelength:
-    // one room flickers together, separate rooms drift apart.
-    float t = frameTimeCounter * GENTLE_TAU / 3600.0;
-    float phase = dot(worldPosition.xz, vec2(0.09, 0.07)) + worldPosition.y * 0.05;
-    float flicker = sin(t * 26000.0 + phase) * 0.55 + sin(t * 41000.0 + phase * 1.7) * 0.30
-        + sin(t * 9000.0 + phase * 0.6) * 0.15;
-    glow *= 1.0 + 0.035 * flicker * level * level;
-#endif
     vec3 graded = light * tint * glow;
     return min(mix(light, graded, share * BLOCKLIGHT_WARMTH), vec3(1.25));
+}
+
+// Bright, warm texels of a flame, lava or glowing block face. Dark sticks,
+// stone, cool colors and white UI-like texels are rejected.
+float gentleFlameMask(vec3 texel) {
+    float peak = max(texel.r, max(texel.g, texel.b));
+    return smoothstep(0.55, 0.85, peak) * smoothstep(0.30, 0.50, texel.r - texel.b);
+}
+
+// Irregular flame brightness around 1.0. Each source has its own phase, so
+// torches flicker independently. Speed is 1 (flame) or 0 (slow lava pulse):
+// integer multipliers keep the hourly timer wrap seamless.
+float gentleFlicker(float phase, float speed) {
+#if TORCH_FLICKER == 1
+    float t = frameTimeCounter * GENTLE_TAU / 3600.0;
+    float n = sin(t * 26000.0 * speed + phase) * 0.50
+        + sin(t * 41000.0 * speed + phase * 1.7) * 0.30
+        + sin(t * 9000.0 + phase * 0.6) * 0.20;
+    return 1.0 + 0.22 * n;
+#else
+    return 1.0;
+#endif
 }
 #endif

@@ -25,9 +25,10 @@ luz das tochas e as máquinas continuam como você conhece. O que muda é a atmo
   plantações e folhas balançam com o vento. Rajadas percorrem os campos em
   ondas, as folhas farfalham, as vitórias-régias boiam e o vento aumenta na
   chuva. Contra o sol, folhas e grama ficam levemente translúcidas.
-- **Tochas e lâmpadas:** luz artificial mais quente e viva, mais forte perto da
-  chama, com uma leve tremulação. Segurar uma tocha (ou qualquer item que
-  emita luz) ilumina ao seu redor.
+- **Tochas e lâmpadas:** luz artificial mais quente, mais forte perto da
+  chama e estável nas paredes. As chamas de tochas, fogo, lava, glowstone e as
+  partículas de chama ganham um halo suave e tremulam, cada uma no seu ritmo.
+  Segurar uma tocha (ou qualquer item que emita luz) ilumina ao seu redor.
 - **Imagem:** FXAA, nitidez adaptativa sem halos, bloom discreto e compressão
   dos tons muito claros.
 - **Seguro para o modpack:** Nether, End e dimensões de mods (Galacticraft,
@@ -62,9 +63,9 @@ arquivo `.txt` com o mesmo nome do pack na pasta `shaderpacks`.
 
 | Perfil | Para quem | Sombras | Nuvens | Água | Tochas |
 |---|---|---|---|---|---|
-| **Minimal** | PCs modestos, bases enormes | Desligadas (só sombreamento direcional) | Simples | Original do jogo | Levemente quentes, sem tremulação |
-| **Natural** *(padrão)* | Equilíbrio entre beleza e FPS | Suaves, 64 blocos | Formações variadas | Ondas, reflexos (12 passos), profundidade | Quentes, tremulação leve |
-| **Atmospheric** | Capturas de tela, PCs folgados | Mais suaves | Duas camadas | Reflexos detalhados (24 passos) | Bem quentes, tremulação leve |
+| **Minimal** | PCs modestos, bases enormes | Desligadas (só sombreamento direcional) | Simples | Original do jogo | Levemente quentes, halo fraco |
+| **Natural** *(padrão)* | Equilíbrio entre beleza e FPS | Suaves, 64 blocos | Formações variadas | Ondas, reflexos (12 passos), profundidade | Quentes, halo nas chamas |
+| **Atmospheric** | Capturas de tela, PCs folgados | Mais suaves | Duas camadas | Reflexos detalhados (24 passos) | Bem quentes, halo mais forte |
 
 Todas as opções podem ser ajustadas individualmente nos submenus *Nuvens*,
 *Vegetação*, *Luz e sombras*, *Tochas e lâmpadas*, *Água e reflexos*, *Nitidez e brilho* e
@@ -91,8 +92,9 @@ nuvens* escolha *Nativo*. *Qualidade das nuvens → Desligadas* esconde as nuven
 Superfície pelo bioma. Se alguma dimensão reutiliza biomas da Superfície, desligue
 *Compatibilidade → Atmosfera terrestre*.
 
-**Não gosto da luz piscando / da cor quente.** Em *Tochas e lâmpadas*, desligue
-*Tremulação das tochas* ou baixe *Calor da luz das tochas* (0 = luz vanilla).
+**Não gosto das chamas tremulando / da cor quente / do halo.** Em *Tochas e
+lâmpadas*, desligue *Tremulação das chamas*, baixe *Calor da luz das tochas*
+(0 = luz vanilla) ou *Brilho das chamas* (0 = sem halo).
 
 **Reflexos somem na borda da tela.** É uma limitação dos reflexos em tela (SSR):
 só aparece o que está visível. Fora da tela, a água reflete o céu.
@@ -130,7 +132,7 @@ docs/TECNICO.md        notas técnicas do pipeline
 
 ```sh
 sudo apt install glslang-tools   # glslangValidator
-python3 tools/validate.py        # 138 programas x 6 conjuntos de opções
+python3 tools/validate.py        # 144 programas x 6 conjuntos de opções
 python3 tools/build.py           # empacota o ZIP
 ```
 
@@ -158,7 +160,7 @@ while keeping the vanilla look: soft sky gradient, blocky bevelled clouds that g
 near the sun, soft sky-tinted sun shadows with no indoor light leaks, waving water
 with fine ripples, sun sparkles, screen-space reflections and depth (clear
 shores, deeper water), rolling wind gusts on grass, flowers, crops and leaves,
-warm gently flickering torch light, light from held torches, plus FXAA,
+warm torch light, glowing flickering flames, light from held torches, plus FXAA,
 adaptive sharpening and subtle bloom.
 Nether, End and modded dimensions keep native rendering; machines, cables and mod
 fluids are never altered.
