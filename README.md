@@ -15,7 +15,9 @@ Mais bonito e com mais vida, sem mudar a cara do jogo.
 
 [![Baixar a última versão](https://img.shields.io/badge/%E2%AC%87%20Baixar-%C3%BAltima%20vers%C3%A3o-2ea44f?style=for-the-badge)](https://github.com/CptBomba/Shader-GTNH-Gentle-Atomosphere/releases/latest)
 
-<img src="docs/images/rio.jpg" alt="Rio em um bioma temperado com o shader: água azul com reflexos, nuvens em blocos e grama ao vento" width="860">
+<img src="docs/images/rio.jpg" alt="Rio com o shader: água azul com reflexos e profundidade, nuvens em blocos e grama ao vento" width="900">
+
+Criado por **[CptBomba](https://github.com/CptBomba)** (Capitão Bomba)
 
 </div>
 
@@ -58,6 +60,27 @@ luz das tochas e as máquinas continuam como você conhece. O que muda é a atmo
 - 🛡️ **Seguro para o modpack:** Nether, End e dimensões de mods (Galacticraft,
   GalaxySpace etc.) ficam com a renderização original. Máquinas, cabos, fluidos
   de mods e blocos desconhecidos não são deformados nem recoloridos.
+
+## Capturas
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/amanhecer.jpg" alt="Manhã num campo de flores: sol com brilho suave, nuvens aquecidas pela luz e névoa leve nos morros"></td>
+    <td width="50%"><img src="docs/images/montanha.jpg" alt="Encosta gramada com o sol atrás de uma montanha de pedra e nuvens altas"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>☀️ Manhã: sol, nuvens aquecidas e névoa no horizonte</sub></td>
+    <td align="center"><sub>⛰️ Vento na grama e nas folhas, céu limpo</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/noite.jpg" alt="Noite com céu azul-escuro, estrelas, Via Láctea discreta e nuvens iluminadas pela lua"></td>
+    <td width="50%"><img src="docs/images/base.jpg" alt="Interior de uma base do GregTech com máquinas, sem manchas de luz vazando"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>🌙 Noite: estrelas, Via Láctea e nuvens ao luar</sub></td>
+    <td align="center"><sub>🏭 Base do GregTech: iluminação estável, sem vazamento de luz</sub></td>
+  </tr>
+</table>
 
 ## Requisitos
 
@@ -176,10 +199,20 @@ Relatos de problemas são bem-vindos nas
 Inclua uma captura de tela, o perfil usado, a versão do GTNH/Angelica e sua placa
 de vídeo.
 
+## Créditos
+
+**GTNH Gentle Atmosphere** é criado e mantido por
+**[CptBomba](https://github.com/CptBomba)** (Capitão Bomba): ideia, direção
+visual e testes no GTNH.
+
+Agradecimentos à equipe do [GT New Horizons](https://github.com/GTNewHorizons) e
+do [Angelica](https://github.com/GTNewHorizons/Angelica), que tornaram possível
+usar shaders no 1.7.10.
+
 ## Licença
 
-[GPL-3.0](LICENSE). Você pode usar, modificar e redistribuir, mantendo a mesma
-licença e os créditos.
+[GPL-3.0](LICENSE) © 2026 CptBomba. Você pode usar, modificar e redistribuir,
+mantendo a mesma licença e os créditos ao autor original.
 
 ---
 
@@ -203,3 +236,6 @@ drop it (still zipped) into `.minecraft/shaderpacks`, then pick it under
 *Options → Video Settings → Shader Packs*. Profiles: **Minimal** (no cast shadows,
 lowest cost), **Natural** (default), **Atmospheric** (two cloud layers, detailed
 reflections). Menus are available in English and Brazilian Portuguese.
+
+**Credits:** created and maintained by [CptBomba](https://github.com/CptBomba)
+(Capitão Bomba). Licensed under GPL-3.0.
